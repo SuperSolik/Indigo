@@ -24,7 +24,7 @@
 #include "base_c/defs.h"
 #include "base_c/os_tls.h"
 #include "base_cpp/array.h"
-#include "base_cpp/auto_ptr.h"
+#include <memory>
 #include "base_cpp/os_sync_wrapper.h"
 #include "base_cpp/pool.h"
 #include "base_cpp/ptr_array.h"
@@ -89,14 +89,14 @@ namespace indigo
         T& getLocalCopy(const qword id)
         {
             OsLocker locker(_lock.ref());
-            AutoPtr<T>& ptr = _map.findOrInsert(id);
+            std::unique_ptr<T>& ptr = _map.findOrInsert(id);
             if (ptr.get() == NULL)
                 ptr.reset(new T());
-            return ptr.ref();
+            return *ptr;
         }
 
     private:
-        typedef RedBlackObjMap<qword, AutoPtr<T>> _Map;
+        typedef RedBlackObjMap<qword, std::unique_ptr<T>> _Map;
 
         _Map _map;
         ThreadSafeStaticObj<OsLock> _lock;
