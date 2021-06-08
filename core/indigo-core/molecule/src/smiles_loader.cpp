@@ -517,14 +517,14 @@ void SmilesLoader::_readOtherStuff()
                             }
                             else if (label.size() == 3 && label[0] == 'A' && label[1] == 'H')
                             {
-                                std::unique_ptr<QueryMolecule::Atom> x_atom(new QueryMolecule::Atom());
+                                std::unique_ptr<QueryMolecule::Atom> x_atom = std::make_unique<QueryMolecule::Atom>();
 
                                 x_atom->type = QueryMolecule::OP_NONE;
                                 _qmol->resetAtom(i, x_atom.release());
                             }
                             else if (label.size() == 2 && label[0] == 'X')
                             {
-                                std::unique_ptr<QueryMolecule::Atom> x_atom(new QueryMolecule::Atom());
+                                std::unique_ptr<QueryMolecule::Atom> x_atom = std::make_unique<QueryMolecule::Atom>();
 
                                 x_atom->type = QueryMolecule::OP_OR;
                                 x_atom->children.add(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_F));
@@ -539,7 +539,7 @@ void SmilesLoader::_readOtherStuff()
                             }
                             else if (label.size() == 3 && label[0] == 'X' && label[1] == 'H')
                             {
-                                std::unique_ptr<QueryMolecule::Atom> x_atom(new QueryMolecule::Atom());
+                                std::unique_ptr<QueryMolecule::Atom> x_atom = std::make_unique<QueryMolecule::Atom>();
 
                                 x_atom->type = QueryMolecule::OP_OR;
                                 x_atom->children.add(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_F));
@@ -555,7 +555,7 @@ void SmilesLoader::_readOtherStuff()
                             }
                             else if (label.size() == 2 && label[0] == 'M')
                             {
-                                std::unique_ptr<QueryMolecule::Atom> x_atom(new QueryMolecule::Atom());
+                                std::unique_ptr<QueryMolecule::Atom> x_atom = std::make_unique<QueryMolecule::Atom>();
 
                                 x_atom->type = QueryMolecule::OP_AND;
                                 x_atom->children.add(QueryMolecule::Atom::nicht(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_C)));
@@ -583,7 +583,7 @@ void SmilesLoader::_readOtherStuff()
                             }
                             else if (label.size() == 3 && label[0] == 'M' && label[1] == 'H')
                             {
-                                std::unique_ptr<QueryMolecule::Atom> x_atom(new QueryMolecule::Atom());
+                                std::unique_ptr<QueryMolecule::Atom> x_atom = std::make_unique<QueryMolecule::Atom>();
 
                                 x_atom->type = QueryMolecule::OP_AND;
                                 x_atom->children.add(QueryMolecule::Atom::nicht(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_C)));
@@ -1003,7 +1003,7 @@ void SmilesLoader::_parseMolecule()
                     if (_qmol != 0)
                     {
                         QS_DEF(Array<char>, bond_str);
-                        std::unique_ptr<QueryMolecule::Bond> qbond(new QueryMolecule::Bond());
+                        std::unique_ptr<QueryMolecule::Bond> qbond = std::make_unique<QueryMolecule::Bond>();
 
                         bond_str.readString(_pending_bonds_pool.at(_cycles[number].pending_bond_str), false);
                         _readBond(bond_str, *bond, qbond);
@@ -1355,7 +1355,7 @@ void SmilesLoader::_parseMolecule()
             QueryMolecule::Atom& q_beg = _qmol->getAtom(edge.beg);
             QueryMolecule::Atom& q_end = _qmol->getAtom(edge.end);
 
-            std::unique_ptr<QueryMolecule::Bond> new_qbond(new QueryMolecule::Bond(QueryMolecule::BOND_ORDER, BOND_SINGLE));
+            std::unique_ptr<QueryMolecule::Bond> new_qbond = std::make_unique<QueryMolecule::Bond>(QueryMolecule::BOND_ORDER, BOND_SINGLE);
 
             bool beg_can_be_aromatic = q_beg.possibleValue(QueryMolecule::ATOM_AROMATICITY, ATOM_AROMATIC);
             bool end_can_be_aromatic = q_end.possibleValue(QueryMolecule::ATOM_AROMATICITY, ATOM_AROMATIC);
@@ -1793,7 +1793,7 @@ void SmilesLoader::_addLigandsForStereo()
                     qatom.reset(QueryMolecule::Atom::oder(QueryMolecule::Atom::nicht(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_H)),
                                                       new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_H)));
 
-                std::unique_ptr<QueryMolecule::Bond> qbond(new QueryMolecule::Bond(QueryMolecule::BOND_ORDER, BOND_SINGLE));
+                std::unique_ptr<QueryMolecule::Bond> qbond = std::make_unique<QueryMolecule::Bond>(QueryMolecule::BOND_ORDER, BOND_SINGLE);
 
                 atom.star_atom = true;
                 int any_atom_idx = _qmol->addAtom(qatom.release());
@@ -1815,8 +1815,8 @@ void SmilesLoader::_addLigandsForStereo()
                 _AtomDesc& atom = _atoms.push(_neipool);
                 _BondDesc* bond = &_bonds.push();
 
-                std::unique_ptr<QueryMolecule::Atom> qatom(new QueryMolecule::Atom(QueryMolecule::ATOM_NUMBER, ELEM_H));
-                std::unique_ptr<QueryMolecule::Bond> qbond(new QueryMolecule::Bond(QueryMolecule::BOND_ORDER, BOND_SINGLE));
+                std::unique_ptr<QueryMolecule::Atom> qatom = std::make_unique<QueryMolecule::Atom>(QueryMolecule::ATOM_NUMBER, ELEM_H);
+                std::unique_ptr<QueryMolecule::Bond> qbond = std::make_unique<QueryMolecule::Bond>(QueryMolecule::BOND_ORDER, BOND_SINGLE);
 
                 atom.label = ELEM_H;
                 int exp_h_idx = _qmol->addAtom(qatom.release());
