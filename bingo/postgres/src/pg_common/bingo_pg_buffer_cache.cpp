@@ -3,8 +3,8 @@
 
 #include "base_cpp/output.h"
 #include "base_cpp/scanner.h"
-#include "bingo_pg_buffer_cache.h"
 #include "bingo_pg_common.h"
+#include "bingo_pg_buffer_cache.h"
 
 using namespace indigo;
 
